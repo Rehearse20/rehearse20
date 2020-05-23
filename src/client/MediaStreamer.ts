@@ -52,7 +52,7 @@ class MediaStreamer {
       this.child.on('close', (code) => {
         console.log(`trx exited with code ${code}`);
       });
-      this.timer = setInterval(() => this.child.kill('SIGUSR1'), 5000);
+      //this.timer = setInterval(() => this.child.kill('SIGUSR1'), 5000);
     }
   }
 
