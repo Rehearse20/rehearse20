@@ -72,7 +72,7 @@ class MediaStreamer {
   trx() {
     let clientStrings = [...this.streamers.entries()].map(
       ([id, streamer]) =>
-        `${streamer.ssrc}@${streamer.localPort}!${streamer.remoteAddress}:${streamer.remotePort}`
+        `${streamer.ssrc}@${streamer.localPort}#${streamer.remoteAddress}:${streamer.remotePort}`
     );
     console.log(path.join(__dirname, 'trx', 'trx'), [
       '-x',
@@ -80,7 +80,7 @@ class MediaStreamer {
       ...this.extra.split(' '),
     ]);
     const child = spawn(path.join(__dirname, 'trx', 'trx'), [
-      '-X',
+      '-x',
       clientStrings.join(','),
       ...this.extra.split(' '),
     ]);
