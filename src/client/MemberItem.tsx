@@ -23,15 +23,20 @@ const useStyles = makeStyles({
   },
 });
 
+const trxColor = (value) => {
+  return typeof value === 'undefined'
+    ? 'disabled'
+    : value > 0
+    ? 'primary'
+    : 'error';
+};
+
 const MemberItem = ({
   member,
-  trx = { isRecving: false, isSending: false },
+  trxInfo = { 'recv-bandwidth': undefined, 'send-bandwidth': undefined },
   onVolumeClick,
 }) => {
   const classes = useStyles();
-
-  const isRecving = trx.isRecving || false;
-  const isSending = trx.isSending || false;
 
   const onClick = () => {
     onVolumeClick(member.id);
@@ -40,13 +45,19 @@ const MemberItem = ({
   return (
     <ListItem>
       <div className={classes.box}>
-        <IconButton onClick={onClick}>
+        {/* <IconButton onClick={onClick}>
           {isRecving ? <VolumeUp /> : <VolumeOff />}
-        </IconButton>
+        </IconButton> */}
         {member.name}
         <Box component="span" className={classes.alignRight}>
-          <CallReceived color={isRecving ? 'primary' : 'error'}></CallReceived>
-          <CallMade color={isSending ? 'primary' : 'error'}></CallMade>
+          <CallReceived
+            fontSize="small"
+            color={trxColor(trxInfo['recv-bandwidth'])}
+          ></CallReceived>
+          <CallMade
+            fontSize="small"
+            color={trxColor(trxInfo['send-bandwidth'])}
+          ></CallMade>
         </Box>
       </div>
     </ListItem>

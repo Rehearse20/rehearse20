@@ -58,6 +58,20 @@ const trx = (state = {}, action) => {
   }
 };
 
+const trxInfo = (state = {}, action) => {
+  switch (action.type) {
+    case actions.SET_TRX_INFO:
+      return {
+        ...state,
+        [action.id]: {
+          ...action.info,
+        },
+      };
+    default:
+      return state;
+  }
+};
+
 const trxParameters = (state = '', action) => {
   switch (action.type) {
     case actions.SET_TRX_PARAMETERS:
@@ -80,4 +94,10 @@ const volume = (state = { isMuted: false }, action) => {
   }
 };
 
-export default combineReducers({ members, trx, trxParameters, volume });
+export default combineReducers({
+  members,
+  trx,
+  trxInfo,
+  trxParameters,
+  volume,
+});
