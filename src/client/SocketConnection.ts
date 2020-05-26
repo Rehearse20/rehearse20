@@ -84,7 +84,7 @@ const SocketConnection = (props) => {
 
   const subscribeToSocket = () => {
     const socket = io(SOCKET_SERVER, { transports: ['websocket'] });
-    const streamer = new MediaStreamer();
+    const streamer = new MediaStreamer(store);
     setStreamer(streamer);
 
     socket.on('connect', async () => {

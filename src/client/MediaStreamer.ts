@@ -2,6 +2,8 @@ import { ChildProcess, spawn } from 'child_process';
 import * as path from 'path';
 import * as dgram from 'dgram';
 
+import * as actions from './actions';
+
 interface StreamerData {
   localPort: number;
   remoteAddress: number;
@@ -10,13 +12,15 @@ interface StreamerData {
 }
 
 class MediaStreamer {
+  store: any;
   streamers: Map<string, StreamerData>;
   child: ChildProcess;
   timer: NodeJS.Timeout;
   extra: string;
 
-  constructor() {
+  constructor(store) {
     this.streamers = new Map();
+    this.store = store;
   }
 
   startSending(id, localPort, remoteAddress, remotePort, ssrc, extra = '') {
@@ -111,13 +115,15 @@ class MediaStreamer {
   }
 
   publishInfo(info) {
-    this.streamers.forEach((c) => {
+    this.streamers.forEach((c, id) => {
       const ci = `${c.ssrc}@${c.localPort}#${c.remoteAddress}:${c.remotePort}`;
       const stats = info[ci];
       if (stats) {
         console.log(`${ci} => ${JSON.stringify(stats)}`);
+        this.store.dispatch(actions.setTrxInfo({ id, info: stats }));
       } else {
         console.log(`No stats for ${ci}`);
+        this.store.dispatch(actions.setTrxInfo({ id, info: {} }));
       }
     });
   }
