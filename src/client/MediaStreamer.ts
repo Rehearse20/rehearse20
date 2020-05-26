@@ -84,7 +84,13 @@ class MediaStreamer {
       clientStrings.join(','),
       ...this.extra.split(' '),
     ]);
-    child.stdout.on('data', (data) => console.log(data.toString()));
+    child.stdout.on('data', (data) => {
+      console.log(data.toString());
+      try {
+        const info = JSON.parse(data.toString());
+        this.publishInfo(info);
+      } catch (e) {}
+    });
     child.stderr.on('data', (data) => console.error(data.toString()));
     return child;
   }
@@ -101,6 +107,18 @@ class MediaStreamer {
         streamer.ssrc,
         extraParams
       );
+    });
+  }
+
+  publishInfo(info) {
+    this.streamers.forEach((c) => {
+      const ci = `${c.ssrc}@${c.localPort}#${c.remoteAddress}:${c.remotePort}`;
+      const stats = info[ci];
+      if (stats) {
+        console.log(`${ci} => ${JSON.stringify(stats)}`);
+      } else {
+        console.log(`No stats for ${ci}`);
+      }
     });
   }
 }
