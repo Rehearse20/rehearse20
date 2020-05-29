@@ -25,3 +25,11 @@ export function addSession(sessionId) {
   );
   localStorage.setItem('sessions', JSON.stringify(sessions));
 }
+
+export function getTrxParameters(): string {
+  return localStorage.getItem('trxParameters') || '';
+}
+
+export function setTrxParameters(params: string) {
+  localStorage.setItem('trxParameters', params);
+}

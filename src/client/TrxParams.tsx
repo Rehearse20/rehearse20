@@ -4,14 +4,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, TextField } from '@material-ui/core';
 
 import * as actions from './actions';
+import * as storage from './persistentStorage';
 
 const Settings = () => {
-  const [trxParams, setTrxParams] = useState('');
+  const [trxParams, setTrxParams] = useState(storage.getTrxParameters());
   const [isApplyEnabled, setApplyEnabled] = useState(false);
   const dispatch = useDispatch();
 
   const onChange = (event) => {
     const value = event.target.value;
+    storage.setTrxParameters(value);
     setTrxParams(value);
     setApplyEnabled(true);
   };
